@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this template in your research or project, please cite it as below."
+title: "Magento 2 Docker + FrankenPHP Template"
+abstract: "Production-ready Docker environment for Magento 2 with FrankenPHP — the modern, high-performance PHP application server. This template provides a complete containerized development and production environment with best practices for Magento 2 deployment."
+authors:
+  - family-names: "CleatSquad"
+    name: "CleatSquad"
+type: software
+repository-code: "https://github.com/CleatSquad/magento-frankenphp-template"
+url: "https://github.com/CleatSquad/magento-frankenphp-template"
+license: MIT
+keywords:
+  - magento2
+  - docker
+  - frankenphp
+  - caddy
+  - php
+  - e-commerce
+  - docker-compose
+  - magento
+  - opensearch
+  - mariadb
+  - redis
+  - rabbitmq
+  - template
+  - development-environment
+  - production-ready
+version: "1.0.0"
+date-released: "2024-01-01"
