@@ -236,6 +236,8 @@ If this project helped you, please consider:
 
 [![Star History Chart](https://api.star-history.com/svg?repos=CleatSquad/magento-frankenphp-template&type=Date)](https://star-history.com/#CleatSquad/magento-frankenphp-template&Date)
 
+*Star history chart may take a moment to load*
+
 </div>
 
 ## 💬 Community & Support

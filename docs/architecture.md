@@ -173,13 +173,13 @@ Recommended minimum resources:
 
 | Container   | CPU  | Memory | Disk   |
 |-------------|------|--------|--------|
-| app         | 2    | 2GB    | 10GB   |
-| mariadb     | 1    | 1GB    | 20GB   |
-| opensearch  | 1    | 2GB    | 10GB   |
+| app         | 2.0  | 2GB    | 10GB   |
+| mariadb     | 1.0  | 1GB    | 20GB   |
+| opensearch  | 1.0  | 2GB    | 10GB   |
 | valkey      | 0.5  | 512MB  | 1GB    |
 | rabbitmq    | 0.5  | 512MB  | 1GB    |
 | mailhog     | 0.1  | 128MB  | 100MB  |
-| **Total**   | 5+   | 6GB+   | 42GB+  |
+| **Total**   | 5.1+ | 6GB+   | 42GB+  |
 
 ## 🔧 Customization Points
 

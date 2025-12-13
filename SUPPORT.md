@@ -17,12 +17,14 @@ Before seeking support, please check our comprehensive documentation:
 
 ### GitHub Discussions
 
-For questions, ideas, and general discussions, please use [GitHub Discussions](https://github.com/CleatSquad/magento-frankenphp-template/discussions):
+For questions, ideas, and general discussions, please use [GitHub Discussions](https://github.com/CleatSquad/magento-frankenphp-template/discussions) (if enabled):
 
 - **Q&A**: Ask questions and get help from the community
 - **Ideas**: Share feature requests and suggestions
 - **Show and Tell**: Share your projects built with this template
 - **General**: Any other topics related to the project
+
+> **Note**: If Discussions are not yet enabled, please use [Issues](https://github.com/CleatSquad/magento-frankenphp-template/issues) for questions.
 
 ### Issues
 

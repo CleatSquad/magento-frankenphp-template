@@ -1,7 +1,18 @@
 # GitHub Sponsors configuration
 # This file enables the "Sponsor" button on the repository
+# 
+# ⚠️ NOTE: This is a template configuration. To enable the Sponsor button:
+# 1. Uncomment and add your sponsor account(s) below
+# 2. Remove this note
+# 3. Commit and push the changes
+#
+# Example:
+# github: your-github-username
+# patreon: your-patreon-username
+#
+# For more information: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
 
-github: # Add your GitHub username here for GitHub Sponsors
+# github: # Add your GitHub username here for GitHub Sponsors
 # patreon: # Add your Patreon username
 # open_collective: # Add your Open Collective username
 # ko_fi: # Add your Ko-fi username
