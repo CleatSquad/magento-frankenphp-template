@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Fix file ownership and permissions in the container
+# Usage: bin/fix-permissions [path]
+# Example: bin/fix-permissions var
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+cd "${PROJECT_ROOT}"
+
+echo "🔧 Fixing filesystem ownership and permissions..."
+
+if [ -z "$1" ]; then
+    # Fix ownership
+    "${SCRIPT_DIR}/rootnotty" chown -R www-data:www-data /var/www/html
+    
+    # Fix permissions
+    "${SCRIPT_DIR}/clinotty" find var vendor pub/static pub/media app/etc \( -type f -or -type d \) -exec chmod u+w {} + 2>/dev/null || true
+    "${SCRIPT_DIR}/clinotty" chmod u+x bin/magento 2>/dev/null || true
+else
+    # Fix ownership for specific path
+    "${SCRIPT_DIR}/rootnotty" chown -R www-data:www-data /var/www/html/"$1"
+    
+    # Fix permissions for specific path
+    "${SCRIPT_DIR}/clinotty" find "$1" \( -type f -or -type d \) -exec chmod u+w {} + 2>/dev/null || true
+fi
+
+echo "✅ Filesystem ownership and permissions fixed."

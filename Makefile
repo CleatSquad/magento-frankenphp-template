@@ -1,8 +1,5 @@
 # Magento Docker FrankenPHP - Makefile
 # Common commands for managing the Docker environment
-#
-# NOTE: CLI tools are also available in the bin/ directory.
-# See docs/CLI.md for full documentation.
 
 # Load environment file if it exists
 ifneq ("$(wildcard .env)","")
@@ -13,15 +10,19 @@ endif
 
 # Configuration
 APP := app
+PROFILE := dev
 
 # Default shell
 SHELL := /bin/bash
 
-.PHONY: help init uninstall-magento setup-magento cache reindex compile upgrade-magento \
-        permissions composer-install composer-update composer-require version \
-        up down restart build install-magento full-install \
-        test-integration test-unit test-api \
-        bash logs status remove removeall fixowns fixperms mysql mysqldump redis deploy
+.PHONY: help init setup-magento uninstall-magento \
+        up down restart build logs status clean clean-all \
+        shell permissions \
+        cache reindex compile upgrade deploy \
+        composer-install composer-update composer-require \
+        mysql mysqldump \
+        test-unit test-integration test-api \
+        version
 
 # Default target - display help
 .DEFAULT_GOAL := help
@@ -31,34 +32,73 @@ init:
 	./bin/setup
 	./bin/start
 
-# Uninstall Magento (removes all data)
-uninstall-magento:
-	./bin/uninstall-magento
-
 # Install Magento with interactive setup
 setup-magento:
 	./bin/setup-magento
 
+# Uninstall Magento (removes all data)
+uninstall-magento:
+	./bin/uninstall-magento
+
+# Start Docker containers
+up:
+	./bin/start
+
+# Stop Docker containers
+down:
+	docker compose --profile $(PROFILE) stop
+
+# Restart Docker containers
+restart:
+	docker compose --profile $(PROFILE) restart
+
+# Build Docker images
+build:
+	docker compose build
+
+# Follow container logs
+logs:
+	docker compose --profile $(PROFILE) logs -f
+
+# Show container status
+status:
+	docker compose --profile $(PROFILE) ps
+
+# Remove containers
+clean:
+	docker compose --profile $(PROFILE) down
+
+# Remove containers, volumes and networks
+clean-all:
+	docker compose --profile $(PROFILE) down -v
+
+# Open a shell in the app container
+shell:
+	./bin/shell
+
+# Fix file permissions and ownership
+permissions:
+	./bin/fix-permissions
+
 # Clear all Magento caches
 cache:
-	./bin/cache-flush
+	./bin/magento cache:flush
 
 # Reindex all Magento indexers
 reindex:
-	./bin/reindex
+	./bin/magento indexer:reindex
 
 # Compile dependency injection
 compile:
-	./bin/di-compile
+	./bin/magento setup:di:compile
 
 # Run Magento setup upgrade
-upgrade-magento:
-	./bin/setup-upgrade
+upgrade:
+	./bin/magento setup:upgrade
 
-# Fix file permissions (development only)
-permissions:
-	./bin/fixowns
-	./bin/fixperms
+# Deploy static content
+deploy:
+	./bin/magento setup:static-content:deploy -f
 
 # Install Composer dependencies
 composer-install:
@@ -68,76 +108,9 @@ composer-install:
 composer-update:
 	./bin/composer update
 
-# Require a new Composer package (usage: make composer-require ARG=vendor/package)
+# Require a new Composer package (usage: make composer-require PKG=vendor/package)
 composer-require:
-	./bin/composer require $(ARG)
-
-# Display PHP version
-version:
-	./bin/cli php -v
-
-# Start Docker containers
-up:
-	./bin/start
-
-# Stop Docker containers
-down:
-	./bin/stop
-
-# Restart Docker containers
-restart:
-	./bin/restart
-
-# Build Docker images
-build:
-	docker compose build
-
-# Create a new Magento project
-install-magento:
-	docker compose exec -it $(APP) bash -lc "composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition ."
-
-# Full Magento installation (create project, setup, cache, reindex)
-full-install: install-magento setup-magento cache reindex
-
-# Run Magento integration tests (usage: make test-integration)
-test-integration:
-	./bin/magento dev:tests:run integration
-
-# Run Magento unit tests (usage: make test-unit)
-test-unit:
-	./bin/magento dev:tests:run unit
-
-# Run Magento API tests (usage: make test-api)
-test-api:
-	./bin/magento dev:tests:run api
-
-# Open a shell in the app container
-bash:
-	./bin/bash
-
-# Follow container logs
-logs:
-	./bin/logs
-
-# Show container status
-status:
-	./bin/status
-
-# Remove containers
-remove:
-	./bin/remove
-
-# Remove containers, volumes and networks
-removeall:
-	./bin/removeall
-
-# Fix file ownership
-fixowns:
-	./bin/fixowns
-
-# Fix file permissions
-fixperms:
-	./bin/fixperms
+	./bin/composer require $(PKG)
 
 # Access MySQL CLI
 mysql:
@@ -147,64 +120,65 @@ mysql:
 mysqldump:
 	./bin/mysqldump
 
-# Access Redis CLI
-redis:
-	./bin/redis
+# Run Magento unit tests
+test-unit:
+	./bin/magento dev:tests:run unit
 
-# Deploy static content
-deploy:
-	./bin/deploy -f
+# Run Magento integration tests
+test-integration:
+	./bin/magento dev:tests:run integration
+
+# Run Magento API tests
+test-api:
+	./bin/magento dev:tests:run api
+
+# Display PHP version
+version:
+	docker compose exec $(APP) php -v
 
 # Display help
 help:
-	@echo "Available targets:"
+	@echo "Magento Docker FrankenPHP - Available Commands"
 	@echo ""
-	@echo "Quick Start:"
-	@echo "  init                - Initialize and start project (setup + start)"
+	@echo "🚀 Quick Start:"
+	@echo "  make init              - Initialize and start project (first time)"
+	@echo "  make up                - Start containers"
+	@echo "  make down              - Stop containers"
 	@echo ""
-	@echo "Container Management:"
-	@echo "  up                  - Start Docker containers"
-	@echo "  down                - Stop Docker containers"
-	@echo "  restart             - Restart Docker containers"
-	@echo "  status              - Show container status"
-	@echo "  build               - Build Docker images"
-	@echo "  remove              - Remove containers"
-	@echo "  removeall           - Remove containers, volumes and networks"
-	@echo "  bash                - Open shell in app container"
-	@echo "  logs                - Follow container logs"
+	@echo "📦 Container Management:"
+	@echo "  make build             - Build Docker images"
+	@echo "  make restart           - Restart containers"
+	@echo "  make status            - Show container status"
+	@echo "  make logs              - Follow container logs"
+	@echo "  make clean             - Remove containers"
+	@echo "  make clean-all         - Remove containers + volumes"
+	@echo "  make shell             - Open shell in app container"
 	@echo ""
-	@echo "Magento Commands:"
-	@echo "  install-magento     - Create new Magento project"
-	@echo "  setup-magento       - Interactive Magento installation"
-	@echo "  uninstall-magento   - Uninstall Magento"
-	@echo "  full-install        - Full Magento installation"
-	@echo "  cache               - Clear Magento caches"
-	@echo "  reindex             - Reindex Magento"
-	@echo "  compile             - Compile DI"
-	@echo "  upgrade-magento     - Run setup:upgrade"
-	@echo "  deploy              - Deploy static content"
+	@echo "🎯 Magento Commands:"
+	@echo "  make setup-magento     - Interactive Magento installation"
+	@echo "  make uninstall-magento - Uninstall Magento"
+	@echo "  make cache             - Clear all caches"
+	@echo "  make reindex           - Reindex all indexers"
+	@echo "  make compile           - Compile dependency injection"
+	@echo "  make upgrade           - Run setup:upgrade"
+	@echo "  make deploy            - Deploy static content"
+	@echo "  make permissions       - Fix file permissions"
 	@echo ""
-	@echo "Composer Commands:"
-	@echo "  composer-install    - Install Composer dependencies"
-	@echo "  composer-update     - Update Composer dependencies"
-	@echo "  composer-require    - Require package (ARG=vendor/package)"
+	@echo "📚 Composer:"
+	@echo "  make composer-install  - Install dependencies"
+	@echo "  make composer-update   - Update dependencies"
+	@echo "  make composer-require  - Add package (PKG=vendor/package)"
 	@echo ""
-	@echo "Database & Cache:"
-	@echo "  mysql               - Access MySQL CLI"
-	@echo "  mysqldump           - Dump database"
-	@echo "  redis               - Access Redis CLI"
+	@echo "🗄️  Database:"
+	@echo "  make mysql             - Access MySQL CLI"
+	@echo "  make mysqldump         - Dump database"
 	@echo ""
-	@echo "File Operations:"
-	@echo "  permissions         - Fix file permissions"
-	@echo "  fixowns             - Fix file ownership"
-	@echo "  fixperms            - Fix file permissions"
+	@echo "🧪 Testing:"
+	@echo "  make test-unit         - Run unit tests"
+	@echo "  make test-integration  - Run integration tests"
+	@echo "  make test-api          - Run API tests"
 	@echo ""
-	@echo "Testing:"
-	@echo "  test-unit           - Run unit tests"
-	@echo "  test-integration    - Run integration tests"
-	@echo "  test-api            - Run API tests"
+	@echo "ℹ️  Other:"
+	@echo "  make version           - Display PHP version"
 	@echo ""
-	@echo "Other:"
-	@echo "  version             - Display PHP version"
-	@echo ""
-	@echo "For detailed CLI documentation, see: docs/CLI.md"
+	@echo "For detailed documentation, see: docs/CLI.md"

@@ -144,15 +144,16 @@ make help        # Show all available commands
 ## Common Commands
 
 ```bash
-./bin/start              # Start containers
+make init                # First time setup
 make up                  # Start containers
-./bin/stop               # Stop containers
+make down                # Stop containers
+make shell               # Access app container shell
+make cache               # Clear Magento cache
+make permissions         # Fix file permissions
 ./bin/magento cache:flush
-./bin/bash               # Access app container shell
-./bin/setup              # Initial setup
 ./bin/composer install
 ./bin/mysql              # Database CLI
-make help                # Show all Makefile targets
+make help                # Show all available commands
 ```
 
 See [CLI Documentation](docs/cli.md) for all commands.
