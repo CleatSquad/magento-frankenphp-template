@@ -11,7 +11,7 @@
 #                --build-arg STATIC_CONTENT_LANGUAGES="en_US fr_FR" ...
 
 # Stage 1: Build
-FROM mohelmrabet/magento-frankenphp:php8.4-fp1.10.1-base AS builder
+FROM mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-base AS builder
 
 ARG MAGENTO_ROOT=/var/www/html
 # Static content deployment configuration
@@ -76,7 +76,7 @@ RUN rm -rf var/cache/* var/page_cache/* generated/code/* generated/metadata/* pu
  && if [ -f app/etc/env.php.bak ]; then mv app/etc/env.php.bak app/etc/env.php; fi
 
 # Stage 2: Production image
-FROM mohelmrabet/magento-frankenphp:php8.4-fp1.10.1-base
+FROM mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-base
 
 ARG MAGENTO_ROOT=/var/www/html
 

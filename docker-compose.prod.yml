@@ -1,7 +1,7 @@
 services:
   app:
     # Option 1: Use pre-built image (default)
-    image: mohelmrabet/magento-frankenphp:php8.4-fp1.10.1-base
+    image: mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-base
     # Option 2: Build production image with compiled DI and static content
     # build:
     #   context: .
@@ -13,6 +13,10 @@ services:
     environment:
       SERVER_NAME: ${SERVER_NAME:-magento.com}
       MAGENTO_RUN_MODE: production
+    # This bind-mount only applies to Option 1 (base image above).
+    # If you switch to Option 2 (build with docker/images/app/Dockerfile),
+    # the image already contains compiled code and static content —
+    # remove this volume, otherwise it will overwrite/shadow the built app.
     volumes:
       - ./src:/var/www/html
     ports:
@@ -44,10 +48,10 @@ services:
       - prod
     env_file: env/mariadb.env
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env before deploying to production}
       MYSQL_DATABASE: ${DB_NAME:-magento}
       MYSQL_USER: ${DB_USER:-magento}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-magento}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env before deploying to production}
     volumes:
       - db-data:/var/lib/mysql
     healthcheck:

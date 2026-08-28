@@ -2,6 +2,20 @@
 
 This example shows how to create a production-ready Magento Docker image using the FrankenPHP base image.
 
+## Required Environment Variables
+
+`docker-compose.prod.yml` will refuse to start unless these are set in `.env`
+(no weak defaults are provided for production):
+
+```bash
+MYSQL_ROOT_PASSWORD=change-me
+DB_PASSWORD=change-me
+```
+
+Manage the stack with `make prod-up`, `make prod-down`, `make prod-logs`,
+`make prod-status`, `make prod-build`, `make prod-clean` / `prod-clean-all`
+(see `make help`), or call `docker compose -f docker-compose.prod.yml` directly.
+
 ## Quick Start
 
 A ready-to-use production Dockerfile is provided at `docker/images/app/Dockerfile`:
@@ -25,11 +39,14 @@ Or use docker-compose by uncommenting the build section in `docker-compose.prod.
 services:
   app:
     # Option 1: Use pre-built image (default)
-    # image: mohelmrabet/magento-frankenphp:php8.4-fp1.10.1-base
+    # image: mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-base
     # Option 2: Build production image with compiled DI and static content
     build:
       context: .
       dockerfile: docker/images/app/Dockerfile
+    # Remove the `./src:/var/www/html` volume when using this option: the
+    # built image already contains the compiled code and static content,
+    # and the bind-mount would shadow it.
 ```
 
 ## docker/images/app/Dockerfile
@@ -55,7 +72,7 @@ Or use docker-compose by uncommenting the build section in `docker-compose.prod.
 services:
   app:
     # Option 1: Use pre-built image (default)
-    # image: mohelmrabet/magento-frankenphp:php8.4-fp1.10.1-base
+    # image: mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-base
     # Option 2: Build production image with compiled DI and static content
     build:
       context: .
@@ -199,7 +216,7 @@ The `docker/images/app/Dockerfile` already uses a multi-stage build. Here's the 
 
 ```dockerfile
 # Stage 1: Build
-FROM mohelmrabet/magento-frankenphp:php8.4-fp1.10-dev AS builder
+FROM mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-dev AS builder
 
 WORKDIR /var/www/html
 COPY --chown=www-data:www-data . .
@@ -210,7 +227,7 @@ RUN php -d memory_limit=4G bin/magento setup:di:compile
 RUN php -d memory_limit=4G bin/magento setup:static-content:deploy -f --jobs=16
 
 # Stage 2: Production
-FROM mohelmrabet/magento-frankenphp:php8.4-fp1.10-base
+FROM mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-base
 
 WORKDIR /var/www/html
 COPY --from=builder --chown=www-data:www-data /var/www/html .

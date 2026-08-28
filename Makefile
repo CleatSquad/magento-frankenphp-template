@@ -22,6 +22,7 @@ SHELL := /bin/bash
         composer-install composer-update composer-require \
         mysql mysqldump \
         test-unit test-integration test-api \
+        prod-up prod-down prod-restart prod-build prod-logs prod-status prod-clean prod-clean-all \
         version
 
 # Default target - display help
@@ -112,6 +113,40 @@ composer-update:
 composer-require:
 	./bin/composer require $(PKG)
 
+# --- Production (docker-compose.prod.yml) ---
+
+# Start production containers
+prod-up:
+	docker compose -f docker-compose.prod.yml --profile prod up -d
+
+# Stop production containers
+prod-down:
+	docker compose -f docker-compose.prod.yml --profile prod stop
+
+# Restart production containers
+prod-restart:
+	docker compose -f docker-compose.prod.yml --profile prod restart
+
+# Build production image (Dockerfile.prod, if enabled in docker-compose.prod.yml)
+prod-build:
+	docker compose -f docker-compose.prod.yml build
+
+# Follow production container logs
+prod-logs:
+	docker compose -f docker-compose.prod.yml --profile prod logs -f
+
+# Show production container status
+prod-status:
+	docker compose -f docker-compose.prod.yml --profile prod ps
+
+# Remove production containers
+prod-clean:
+	docker compose -f docker-compose.prod.yml --profile prod down
+
+# Remove production containers, volumes and networks
+prod-clean-all:
+	docker compose -f docker-compose.prod.yml --profile prod down -v
+
 # Access MySQL CLI
 mysql:
 	./bin/mysql
@@ -172,6 +207,16 @@ help:
 	@echo "🗄️  Database:"
 	@echo "  make mysql             - Access MySQL CLI"
 	@echo "  make mysqldump         - Dump database"
+	@echo ""
+	@echo "🏭 Production (docker-compose.prod.yml):"
+	@echo "  make prod-up           - Start production containers"
+	@echo "  make prod-down         - Stop production containers"
+	@echo "  make prod-restart      - Restart production containers"
+	@echo "  make prod-build        - Build production image"
+	@echo "  make prod-logs         - Follow production logs"
+	@echo "  make prod-status       - Show production container status"
+	@echo "  make prod-clean        - Remove production containers"
+	@echo "  make prod-clean-all    - Remove production containers + volumes"
 	@echo ""
 	@echo "🧪 Testing:"
 	@echo "  make test-unit         - Run unit tests"

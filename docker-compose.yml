@@ -33,7 +33,7 @@ services:
       - traefik.http.routers.traefik.service=api@internal
 
   app:
-    image: mohelmrabet/magento-frankenphp:php8.4-fp1.10.1-dev
+    image: mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-dev
     container_name: ${PROJECT_NAME:-magento}-app
     user: www-data
     profiles:
