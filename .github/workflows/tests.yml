@@ -93,4 +93,7 @@ jobs:
         run: docker compose config --quiet
 
       - name: Validate docker-compose.prod.yml (prod)
+        env:
+          MYSQL_ROOT_PASSWORD: ci-validation-only
+          DB_PASSWORD: ci-validation-only
         run: docker compose -f docker-compose.prod.yml config --quiet
