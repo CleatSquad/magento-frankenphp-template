@@ -10,9 +10,9 @@
   <a href="https://hub.docker.com/r/mohelmrabet/magento-frankenphp"><img src="https://img.shields.io/docker/pulls/mohelmrabet/magento-frankenphp.svg?logo=docker" alt="Docker Pulls" /></a>
   <img src="https://img.shields.io/badge/magento-2.4.x-orange.svg?logo=magento" alt="Magento 2.4.x" />
   <img src="https://img.shields.io/badge/php-8.2%20|%208.3%20|%208.4-blue.svg?logo=php" alt="PHP Versions" />
-  <img src="https://img.shields.io/badge/frankenphp-1.10-purple.svg" alt="FrankenPHP 1.10" />
+  <img src="https://img.shields.io/badge/frankenphp-1.12-purple.svg" alt="FrankenPHP 1.12" />
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License MIT" /></a>
-  <img src="https://img.shields.io/badge/version-v1.0.0-brightgreen.svg" alt="Version 1.0.0" />
+  <img src="https://img.shields.io/badge/version-v1.1.0-brightgreen.svg" alt="Version 1.1.0" />
 </p>
 
 ## About This Template
