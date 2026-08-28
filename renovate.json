@@ -29,6 +29,22 @@
         "dependencies",
         "traefik"
       ]
+    },
+    {
+      "description": "Enable magento-frankenphp image updates",
+      "matchPackageNames": [
+        "mohelmrabet/magento-frankenphp"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "enabled": true,
+      "groupName": "magento-frankenphp",
+      "automerge": false,
+      "labels": [
+        "dependencies",
+        "magento-frankenphp"
+      ]
     }
   ]
 }
