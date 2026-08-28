@@ -1,7 +1,7 @@
 services:
   app:
     # Option 1: Use pre-built image (default)
-    image: mohelmrabet/magento-frankenphp:php8.4-fp1.10.1-base
+    image: mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-base
     # Option 2: Build production image with compiled DI and static content
     # build:
     #   context: .

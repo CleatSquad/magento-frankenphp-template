@@ -39,7 +39,7 @@ Or use docker-compose by uncommenting the build section in `docker-compose.prod.
 services:
   app:
     # Option 1: Use pre-built image (default)
-    # image: mohelmrabet/magento-frankenphp:php8.4-fp1.10.1-base
+    # image: mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-base
     # Option 2: Build production image with compiled DI and static content
     build:
       context: .
@@ -72,7 +72,7 @@ Or use docker-compose by uncommenting the build section in `docker-compose.prod.
 services:
   app:
     # Option 1: Use pre-built image (default)
-    # image: mohelmrabet/magento-frankenphp:php8.4-fp1.10.1-base
+    # image: mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-base
     # Option 2: Build production image with compiled DI and static content
     build:
       context: .
@@ -216,7 +216,7 @@ The `docker/images/app/Dockerfile` already uses a multi-stage build. Here's the 
 
 ```dockerfile
 # Stage 1: Build
-FROM mohelmrabet/magento-frankenphp:php8.4-fp1.10-dev AS builder
+FROM mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-dev AS builder
 
 WORKDIR /var/www/html
 COPY --chown=www-data:www-data . .
@@ -227,7 +227,7 @@ RUN php -d memory_limit=4G bin/magento setup:di:compile
 RUN php -d memory_limit=4G bin/magento setup:static-content:deploy -f --jobs=16
 
 # Stage 2: Production
-FROM mohelmrabet/magento-frankenphp:php8.4-fp1.10-base
+FROM mohelmrabet/magento-frankenphp:php8.4-fp1.12.7-base
 
 WORKDIR /var/www/html
 COPY --from=builder --chown=www-data:www-data /var/www/html .
