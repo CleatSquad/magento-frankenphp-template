@@ -48,12 +48,18 @@ nano .env
 ```bash
 # Development
 docker compose up -d
+# or: make up
 
-# Production
-docker compose -f docker-compose.prod.yml up -d
+# Production — first set MYSQL_ROOT_PASSWORD and DB_PASSWORD in .env
+# (docker-compose.prod.yml refuses to start without them)
+docker compose -f docker-compose.prod.yml --profile prod up -d
+# or: make prod-up
 ```
 
-### 4. Access Your Services
+> See [Production Deployment](examples/production-dockerfile.md) for required
+> environment variables and the full list of `make prod-*` commands.
+
+### 5. Access Your Services
 
 | Service | URL |
 |---------|-----|

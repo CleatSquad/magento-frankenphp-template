@@ -2,6 +2,20 @@
 
 This example shows how to create a production-ready Magento Docker image using the FrankenPHP base image.
 
+## Required Environment Variables
+
+`docker-compose.prod.yml` will refuse to start unless these are set in `.env`
+(no weak defaults are provided for production):
+
+```bash
+MYSQL_ROOT_PASSWORD=change-me
+DB_PASSWORD=change-me
+```
+
+Manage the stack with `make prod-up`, `make prod-down`, `make prod-logs`,
+`make prod-status`, `make prod-build`, `make prod-clean` / `prod-clean-all`
+(see `make help`), or call `docker compose -f docker-compose.prod.yml` directly.
+
 ## Quick Start
 
 A ready-to-use production Dockerfile is provided at `docker/images/app/Dockerfile`:
@@ -30,6 +44,9 @@ services:
     build:
       context: .
       dockerfile: docker/images/app/Dockerfile
+    # Remove the `./src:/var/www/html` volume when using this option: the
+    # built image already contains the compiled code and static content,
+    # and the bind-mount would shadow it.
 ```
 
 ## docker/images/app/Dockerfile
